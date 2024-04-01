@@ -28,3 +28,5 @@ C
 frontend/nginx.conf,b\4\b4d299c493664e0cd16afc151d53f70774ba19cc
 ?
 backend/pom.xml,f\9\f9590cd73598b6f2427c8b1327d922c50d1dc504
+D
+frontend/src/App.vue,b\3\b395f139c6c3b350eecc10789c2fb0946ccb4abb
