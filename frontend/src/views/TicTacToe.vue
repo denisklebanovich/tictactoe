@@ -136,8 +136,8 @@ const connect = async () => {
   });
 };
 
-onMounted(() => {
-  connect();
+onMounted(async () => {
+  await connect();
 });
 </script>
 
