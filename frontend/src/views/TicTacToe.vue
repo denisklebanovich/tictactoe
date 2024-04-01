@@ -126,8 +126,7 @@ const handleMessage = async (message) => {
 };
 
 const connect = async () => {
-  const backendUrl = 'http://backend:8080';
-  const socket = new SockJS(`${backendUrl}/ws`);
+  const socket = new SockJS(`/api/ws`);
   stompClient = Stomp.over(socket);
   stompClient.connect({}, () => {
     console.log('Connected to the server');
