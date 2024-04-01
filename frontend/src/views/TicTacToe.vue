@@ -126,7 +126,7 @@ const handleMessage = async (message) => {
 };
 
 const connect = async () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+  const backendUrl = 'http://backend:8080';
   const socket = new SockJS(`${backendUrl}/ws`);
   stompClient = Stomp.over(socket);
   stompClient.connect({}, () => {
