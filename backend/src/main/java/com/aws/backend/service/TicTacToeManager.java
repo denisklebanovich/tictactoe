@@ -2,11 +2,12 @@ package com.aws.backend.service;
 
 import com.aws.backend.model.GameState;
 import com.aws.backend.model.TicTacToe;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+@Component
 public class TicTacToeManager {
 
 	/**
@@ -34,8 +35,11 @@ public class TicTacToeManager {
 	 * @return the Tic-Tac-Toe game the player was added to
 	 */
 	public synchronized TicTacToe joinGame(String player) {
-		if (games.values().stream().anyMatch(game -> game.getPlayer1().equals(player) || (game.getPlayer2() != null && game.getPlayer2().equals(player)))) {
-			return games.values().stream().filter(game -> game.getPlayer1().equals(player) || game.getPlayer2().equals(player)).findFirst().get();
+		if (games.values().stream().anyMatch(game -> game.getPlayer1() != null && game.getPlayer1().equals(player))) {
+			return games.values().stream().filter(game -> game.getPlayer1().equals(player)).findFirst().orElse(null);
+		}
+		if (games.values().stream().anyMatch(game -> game.getPlayer2() != null && game.getPlayer2().equals(player))) {
+			return games.values().stream().filter(game -> game.getPlayer2().equals(player)).findFirst().orElse(null);
 		}
 
 		for (TicTacToe game : games.values()) {

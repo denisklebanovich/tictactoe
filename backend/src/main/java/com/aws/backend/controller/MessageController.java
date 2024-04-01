@@ -1,13 +1,22 @@
-package com.aws.backend.tictactoe;
+package com.aws.backend.controller;
+
+import com.aws.backend.model.*;
+import com.aws.backend.service.TicTacToeManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Controller
+@RequiredArgsConstructor
 public class MessageController {
-
-	/**
-	 * Template for sending messages to clients through the message broker.
-	 */
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
+	private final SimpMessagingTemplate messagingTemplate;
 
 	/**
 	 * Manager for the Tic-Tac-Toe games.
@@ -29,7 +38,7 @@ public class MessageController {
 		if (game == null) {
 			TicTacToeMessage errorMessage = new TicTacToeMessage();
 			errorMessage.setType("error");
-			errorMessage.setContent("Não foi possível entrar no jogo. Talvez o jogo já esteja cheio ou ocorreu um erro interno.");
+			errorMessage.setContent("Unable to join game.");
 			return errorMessage;
 		}
 		headerAccessor.getSessionAttributes().put("gameId", game.getGameId());

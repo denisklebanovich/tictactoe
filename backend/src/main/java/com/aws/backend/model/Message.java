@@ -1,2 +1,7 @@
-package com.aws.backend.model;public class Message {
+package com.aws.backend.model;
+
+public interface Message {
+	String getType();
+	String getGameId();
+	String getContent();
 }
