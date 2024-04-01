@@ -51,6 +51,7 @@ public class TicTacToe {
 	 * the winner is set to the corresponding player.
 	 */
 	private void checkWinner() {
+		// Check rows
 		for (int i = 0; i < 3; i++) {
 			if (Objects.equals(board[i][0], board[i][1]) && Objects.equals(board[i][0], board[i][2])) {
 				if (!Objects.equals(board[i][0], " ")) {
@@ -60,6 +61,7 @@ public class TicTacToe {
 			}
 		}
 
+		// Check columns
 		for (int i = 0; i < 3; i++) {
 			if (Objects.equals(board[0][i], board[1][i]) && Objects.equals(board[0][i], board[2][i])) {
 				if (!Objects.equals(board[0][i], " ")) {
@@ -69,13 +71,23 @@ public class TicTacToe {
 			}
 		}
 
+		// Check diagonal (top-left to bottom-right)
 		if (Objects.equals(board[0][0], board[1][1]) && Objects.equals(board[0][0], board[2][2])) {
 			if (!Objects.equals(board[0][0], " ")) {
 				setWinner(Objects.equals(board[0][0], player1) ? player1 : player2);
 				return;
 			}
 		}
+
+		// Check diagonal (top-right to bottom-left)
+		if (Objects.equals(board[0][2], board[1][1]) && Objects.equals(board[0][2], board[2][0])) {
+			if (!Objects.equals(board[0][2], " ")) {
+				setWinner(Objects.equals(board[0][2], player1) ? player1 : player2);
+				return;
+			}
+		}
 	}
+
 
 
 	private void updateGameState() {
