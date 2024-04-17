@@ -1,12 +1,12 @@
 services:
   backend:
     container_name: backend
-    build: ./backend
+    image: gguser1/tictactoe-backend
     ports:
       - "8080:8080"
   frontend:
     container_name: frontend
-    build: ./frontend
+    image: gguser1/tictactoe-frontend
     ports:
       - "80:80"
     depends_on:

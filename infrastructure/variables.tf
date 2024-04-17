@@ -7,3 +7,8 @@ variable "ami" {
   description = "The AMI to use for the EC2 instance"
   default     = "ami-0c101f26f147fa7fd"
 }
+
+variable "app_name" {
+    description = "The name of the application"
+    default     = "TicTacToe"
+}
