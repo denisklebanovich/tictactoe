@@ -8,6 +8,6 @@ services:
     container_name: frontend
     image: gguser1/tictactoe-frontend
     ports:
-      - "80:80"
+      - "5173:5173"
     depends_on:
       - backend

@@ -57,6 +57,7 @@ const updateGame = (message) => {
 };
 
 const showJoinButton = ref(true);
+const connected = ref(false);
 
 const sendMessage = (message) => {
   stompClient.send(`/app/${message.type}`, {}, JSON.stringify(message));
@@ -76,7 +77,11 @@ const makeMove = (move) => {
   });
 };
 
-const joinGame = () => {
+const joinGame = async () => {
+  if (!connected.value){
+    await connect();
+    connected.value = true;
+  }
   player.value = prompt("Enter your name:");
   sendMessage({
     type: "game.join",

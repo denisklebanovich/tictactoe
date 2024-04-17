@@ -42,12 +42,12 @@ resource "aws_ecs_task_definition" "app_task_definition" {
     },
     {
       name         = "frontend"
-      image        = "gguser1/tictactoe-frontend"
+      image        = "gguser1/tictactoe-frontend:fargate"
       essential    = true
       portMappings = [
         {
-          containerPort = 80,
-          hostPort      = 80,
+          containerPort = 5173,
+          hostPort      = 5173,
           protocol      = "tcp"
         }
       ],
