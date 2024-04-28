@@ -36,19 +36,23 @@ resource "aws_ecs_task_definition" "app_task_definition" {
         {
           containerPort = 8080,
           hostPort      = 8080,
-          protocol      = "tcp"
         }
       ]
     },
     {
       name         = "frontend"
-      image        = "gguser1/tictactoe-frontend:fargate"
+      image        = "gguser1/tictactoe-frontend"
       essential    = true
       portMappings = [
         {
           containerPort = 5173,
           hostPort      = 5173,
-          protocol      = "tcp"
+        }
+      ],
+      environment = [
+        {
+          name  = "VITE_BACKEND_URL"
+          value = "http://localhost:8080"
         }
       ],
       dependsOn = [

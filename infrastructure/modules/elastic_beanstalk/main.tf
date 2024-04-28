@@ -11,7 +11,6 @@ resource "aws_s3_object" "elb_app_version" {
   bucket = aws_s3_bucket.app_bucket.bucket
   key    = "docker-compose.yml"
   source = "../docker-compose.yml"
-  etag = filemd5("../docker-compose.yml")
 }
 
 resource "aws_elastic_beanstalk_application_version" "app_version" {
