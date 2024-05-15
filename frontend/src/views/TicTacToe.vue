@@ -23,14 +23,14 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
+import { ref, onMounted } from 'vue';
 import SockJS from 'sockjs-client';
-import Stomp from "stompjs";
+import Stomp from 'stompjs';
 import toastr from 'toastr';
 
 const game = ref({
   gameId: '',
-  board: Array(3).fill(Array(3).fill(' ')),
+  board: Array(3).fill().map(() => Array(3).fill(' ')), // Proper initialization of nested arrays
   turn: '',
   player1: '',
   player2: '',
@@ -39,87 +39,50 @@ const game = ref({
   type: '',
 });
 
-let stompClient = null;
-let player = ref()
-
-const updateGame = (message) => {
-  game.value = {
-    ...game.value,
-    gameId: message.gameId,
-    board: message.board,
-    turn: message.turn,
-    player1: message.player1,
-    player2: message.player2,
-    gameState: message.gameState,
-    winner: message.winner,
-    type: message.type,
-  };
-};
-
+const stompClient = ref(null);
+const player = ref(null);
 const showJoinButton = ref(true);
 const connected = ref(false);
 
-const sendMessage = (message) => {
-  stompClient.send(`/app/${message.type}`, {}, JSON.stringify(message));
+const updateGame = (message) => {
+  Object.assign(game.value, message);
 };
 
-const makeMove = (move) => {
-  if (game.value.type === 'game.gameOver') {
-    toastr.warning(`Game is over!`);
+const makeMove = (index) => {
+  if (game.value.gameState === 'gameOver') {
+    toastr.warning('Game is over!');
     return;
   }
   sendMessage({
-    type: "game.move",
-    move,
-    turn: game.value.turn,
+    type: 'game.move',
+    move: index,
     sender: player.value,
     gameId: game.value.gameId
   });
 };
 
 const joinGame = async () => {
-  if (!connected.value){
+  if (!connected.value) {
     await connect();
-    connected.value = true;
   }
-  player.value = prompt("Enter your name:");
+  player.value = jwtDecode(localStorage.getItem('token')).username;
   sendMessage({
-    type: "game.join",
+    type: 'game.join',
     player: player.value
   });
 };
 
-const handleMessage = async (message) => {
+const handleMessage = (message) => {
   switch (message.type) {
     case 'game.joined':
-      if (message.player1 === player.value || message.player2 === player.value) {
-        await stompClient.subscribe(`/topic/game.${message.gameId}`, (message) => {
-          handleMessage(JSON.parse(message.body));
-        });
-        updateGame(message);
-        showJoinButton.value = false;
-      }
-      break;
     case 'game.move':
-      updateGame(message);
-      break;
     case 'game.left':
       updateGame(message);
-      toastr.warning(`Opponent left the game`);
-      showJoinButton.value = true;
+      showJoinButton.value = message.type === 'game.left';
       break;
     case 'game.gameOver':
-      if (game.value.type === message.type) return;
       updateGame(message);
-      if (message.winner === player.value) {
-        toastr.success(`Congratulations! You won the game!`);
-      } else if (message.gameState === 'TIE') {
-        toastr.info(`Game Over! It's a draw!`);
-      } else if (message.winner) {
-        toastr.warning(`Game Over! Winner: ${message.winner}`);
-      }else {
-        toastr.error(`Game Over!`);
-      }
+      toastr[message.gameState === 'TIE' ? 'info' : 'success'](`Game Over! ${message.winner ? 'Winner: ' + message.winner : "It's a draw!"}`);
       showJoinButton.value = true;
       break;
     case 'error':
@@ -131,20 +94,24 @@ const handleMessage = async (message) => {
 };
 
 const connect = async () => {
-  const socket = new SockJS(`/api/ws`);
-  stompClient = Stomp.over(socket);
-  stompClient.connect({}, () => {
+  const token = localStorage.getItem('token');
+  const socket = new SockJS('/api/ws');
+  stompClient.value = Stomp.over(socket);
+  stompClient.value.connect({ token }, () => {
     console.log('Connected to the server');
-    stompClient.subscribe('/topic/game.state', (message) => {
-      handleMessage(JSON.parse(message.body));
+    connected.value = true;
+    stompClient.value.subscribe('/topic/game.state', (m) => {
+      handleMessage(JSON.parse(m.body));
     });
+  }, (error) => {
+    console.error('Failed to connect:', error);
+    connected.value = false;
   });
 };
 
-onMounted(async () => {
-  await connect();
-});
+onMounted(connect);
 </script>
+
 
 <style scoped lang="scss">
 .game-content {

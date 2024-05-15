@@ -60,15 +60,30 @@ public class AuthenticationService {
 				.withAuthFlow(AuthFlowType.USER_PASSWORD_AUTH)
 				.addAuthParametersEntry("USERNAME", username)
 				.addAuthParametersEntry("PASSWORD", password);
-		try {
-			var authResponse = cognitoIdentityProvider.initiateAuth(authRequest);
-			var result = authResponse.getAuthenticationResult();
-			log.info("User {} logged in successfully", username);
-			return result;
-		} catch (NotAuthorizedException e) {
-			log.error("User login failed: {}", e.getErrorMessage());
-		}
-		return null;
+		var authResponse = cognitoIdentityProvider.initiateAuth(authRequest);
+		var result = authResponse.getAuthenticationResult();
+		log.info("User {} logged in successfully", username);
+		return result;
+	}
+
+	public AuthenticationResultType refreshToken(String refreshToken) {
+		log.info("Refreshing token");
+		InitiateAuthRequest authRequest = new InitiateAuthRequest()
+				.withAuthFlow(AuthFlowType.REFRESH_TOKEN_AUTH)
+				.withClientId(clientId)
+				.addAuthParametersEntry("REFRESH_TOKEN", refreshToken);
+		var authResponse = cognitoIdentityProvider.initiateAuth(authRequest);
+		var result = authResponse.getAuthenticationResult();
+		log.info("Token refreshed successfully");
+		return result;
+	}
+
+	public void signOut(String accessToken) {
+		log.info("Signing out user with access token: {}", accessToken);
+		GlobalSignOutRequest signOutRequest = new GlobalSignOutRequest()
+				.withAccessToken(accessToken);
+		cognitoIdentityProvider.globalSignOut(signOutRequest);
+		log.info("User signed out successfully");
 	}
 }
 

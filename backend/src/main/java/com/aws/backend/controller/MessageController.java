@@ -115,8 +115,13 @@ public class MessageController {
 	@EventListener
 	public void SessionDisconnectEvent(SessionDisconnectEvent event) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-		String gameId = headerAccessor.getSessionAttributes().get("gameId").toString();
-		String player = headerAccessor.getSessionAttributes().get("player").toString();
+		Object gameIdObject = headerAccessor.getSessionAttributes().get("gameId");
+		Object playerObject = headerAccessor.getSessionAttributes().get("player");
+		if (gameIdObject == null || playerObject == null) {
+			return;
+		}
+		String gameId = gameIdObject.toString();
+		String player = playerObject.toString();
 		TicTacToe game = ticTacToeManager.getGame(gameId);
 		if (game != null) {
 			if (game.getPlayer1().equals(player)) {
