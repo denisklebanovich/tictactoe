@@ -71,7 +71,7 @@ resource "aws_lb_listener" "app_lb_listener" {
 }
 
 resource "aws_autoscaling_group" "app_asg" {
-  desired_capacity = 1
+  desired_capacity = 0
   max_size         = 3
   min_size         = 1
   launch_template {
