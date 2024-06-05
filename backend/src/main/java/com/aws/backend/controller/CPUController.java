@@ -13,11 +13,10 @@ public class CPUController {
     @GetMapping("/load")
     public String loadCpu() {
         log.info("CPU load request received. Generating CPU load...");
-        int size = 1000;
+        int size = 5000;
         double[][] matrixA = generateRandomMatrix(size, size);
         double[][] matrixB = generateRandomMatrix(size, size);
         multiplyMatrices(matrixA, matrixB, size);
-        // Return number of threadsInUse
         int threadsInUse = Thread.activeCount();
         return "CPU load generated. Threads in use: " + threadsInUse;
     }
@@ -41,6 +40,5 @@ public class CPUController {
                 }
             }
         }
-
     }
 }
