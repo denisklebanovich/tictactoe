@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu_alarm" {
   statistic           = "Average"
   threshold           = 50
   alarm_description   = "This metric monitors EC2 instance CPU utilization"
-  alarm_actions       = [aws_sns_topic.alert_topic.arn, aws_autoscaling_policy.scale_up]
+  alarm_actions       = [aws_sns_topic.alert_topic.arn, aws_autoscaling_policy.scale_up.arn]
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.app_asg.name
   }
@@ -35,7 +35,7 @@ resource "aws_cloudwatch_metric_alarm" "low_cpu_alarm" {
   statistic           = "Average"
   threshold           = 10
   alarm_description   = "This metric monitors EC2 instance CPU utilization"
-  alarm_actions       = [aws_autoscaling_policy.scale_down]
+  alarm_actions       = [aws_autoscaling_policy.scale_down.arn]
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.app_asg.name
   }

@@ -9,7 +9,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-slim
 
 WORKDIR /app
 
