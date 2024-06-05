@@ -14,7 +14,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu_alarm" {
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
-  period              = 30
+  period              = 60
   statistic           = "Average"
   threshold           = 50
   alarm_description   = "This metric monitors EC2 instance CPU utilization"
@@ -31,7 +31,7 @@ resource "aws_cloudwatch_metric_alarm" "low_cpu_alarm" {
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
-  period              = 30
+  period              = 60
   statistic           = "Average"
   threshold           = 30
   alarm_description   = "This metric monitors EC2 instance CPU utilization"
@@ -47,7 +47,7 @@ resource "aws_cloudwatch_metric_alarm" "no_instances_alarm" {
   evaluation_periods  = 1
   metric_name         = "GroupInServiceInstances"
   namespace           = "AWS/AutoScaling"
-  period              = 30
+  period              = 60
   statistic           = "Minimum"
   threshold           = 1
   alarm_description   = "This metric monitors the number of instances running in the Auto Scaling group"
