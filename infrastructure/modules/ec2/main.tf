@@ -20,8 +20,8 @@ resource "aws_launch_template" "app_template" {
 }
 
 resource "aws_security_group" "lb_sg" {
-  name        = "lb-security-group"
-  vpc_id      = var.vpc_id
+  name   = "lb-security-group"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port   = 80
@@ -71,14 +71,14 @@ resource "aws_lb_listener" "app_lb_listener" {
 }
 
 resource "aws_autoscaling_group" "app_asg" {
-  desired_capacity = 0
-  max_size         = 3
-  min_size         = 1
+  name     = "app-asg"
+  max_size = 3
+  desired_capacity = 1
+  min_size = 0
   launch_template {
     id      = aws_launch_template.app_template.id
     version = "$Latest"
   }
-  target_group_arns   = [aws_lb_target_group.app_tg.arn]
   vpc_zone_identifier = var.app_subnets
 
   tag {
