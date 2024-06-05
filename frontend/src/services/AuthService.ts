@@ -14,6 +14,7 @@ export async function register(email: string, username: string, password: string
     return authClient.post('/register', {email, username, password});
 }
 
+//@ts-ignore
 export async function login(username: string, password: string): Promise<void> {
     const response: AxiosResponse<AuthResponse> = await authClient.post('/login', {username, password});
     const {accessToken, refreshToken} = response.data;
@@ -22,6 +23,7 @@ export async function login(username: string, password: string): Promise<void> {
     localStorage.setItem('username', username);
 }
 
+//@ts-ignore
 export const logout = async () => {
     const accessToken = localStorage.getItem('accessToken');
     localStorage.removeItem('accessToken');
@@ -31,6 +33,7 @@ export const logout = async () => {
     await authClient.post('/logout', {accessToken});
 };
 
+//@ts-ignore
 export const refreshToken = async () => {
     const refreshTokenSaved = localStorage.getItem('refreshToken');
     if (!refreshTokenSaved) {

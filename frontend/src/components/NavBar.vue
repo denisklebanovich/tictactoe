@@ -1,5 +1,6 @@
 <template>
   <nav class="navbar">
+    <button class="nav-link" @click="loadCpu">Load CPU</button>
     <router-link to="/" class="nav-link">Home</router-link>
     <template v-if="userStore.username">
       <router-link to="/game" class="nav-link">Game</router-link>
@@ -21,6 +22,10 @@ const userStore = useUserStore();
 const signOut = async () => {
   await logout();
   await router.push('/login');
+};
+
+const loadCpu = async () => {
+  console.log(await loadCpu());
 };
 </script>
 

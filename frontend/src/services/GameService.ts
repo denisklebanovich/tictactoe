@@ -1,6 +1,5 @@
 import {EventSourcePolyfill} from 'ng-event-source';
 import {refreshToken} from "./AuthService";
-import {useUserStore} from "../stores/userStore";
 
 const API_URL = '/api';
 
@@ -60,6 +59,7 @@ interface MoveRequest {
     playerName: string;
 }
 
+//@ts-ignore
 export async function makeMove(gameId: number, move: MoveRequest): Promise<void> {
     const token = getAuthToken();
     console.log("token", token);
