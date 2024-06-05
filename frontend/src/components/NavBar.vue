@@ -16,6 +16,7 @@
 import {logout} from "@/services/AuthService.ts";
 import {useUserStore} from "@/stores/userStore.ts";
 import router from "@/router/index.js";
+import {loadCPU} from "@/services/CpuService.ts";
 
 const userStore = useUserStore();
 
@@ -25,7 +26,7 @@ const signOut = async () => {
 };
 
 const loadCpu = async () => {
-  console.log(await loadCpu());
+  console.log(await loadCPU());
 };
 </script>
 
