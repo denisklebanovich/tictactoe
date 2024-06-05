@@ -13,7 +13,7 @@ public class CPUController {
     @GetMapping("/load")
     public String loadCpu() {
         log.info("CPU load request received. Generating CPU load...");
-        int size = 5000;
+        int size = 1000;
         double[][] matrixA = generateRandomMatrix(size, size);
         double[][] matrixB = generateRandomMatrix(size, size);
         multiplyMatrices(matrixA, matrixB, size);
