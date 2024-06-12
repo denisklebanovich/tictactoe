@@ -1,3 +1,3 @@
-output "db_address" {
-  value = aws_db_instance.tictactoe_db.address
+output "rds_endpoint" {
+  value = aws_db_instance.tictactoe_db.endpoint
 }

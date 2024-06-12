@@ -1,5 +1,6 @@
 import {EventSourcePolyfill} from 'ng-event-source';
 import {refreshToken} from "./AuthService";
+import axios from "axios";
 
 const API_URL = '/api';
 
@@ -84,6 +85,25 @@ export async function makeMove(gameId: number, move: MoveRequest): Promise<void>
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
     }
+}
+
+export type GameResult = {
+    gameId: number;
+    winner: string;
+    firstPlayer: string;
+    secondPlayer: string;
+    status: string;
+}
+
+//@ts-ignore
+export async function getResults(): Promise<GameResult[]> {
+    const token = getAuthToken();
+    const response = await axios.get(`${API_URL}/game/results`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    });
+    return response.data;
 }
 
 

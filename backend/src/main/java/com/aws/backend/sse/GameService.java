@@ -65,7 +65,7 @@ public class GameService {
 
                 if (gameEvent.event.equals(GameStatus.GAME_ENDED)) {
                     var winner = gameEvent.winner();
-                    var gameResult = new GameResult(player1, player2, winner);
+                    var gameResult = new GameResult(gameEvent.gameId, player1, player2, winner);
                     gameResultRepository.save(gameResult);
                 }
                 try {

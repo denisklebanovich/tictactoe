@@ -15,12 +15,13 @@ public class GameResult {
     @Id
     @GeneratedValue
     private Long id;
-
+    private long gameId;
     private String firstPlayer;
     private String secondPlayer;
     private GameResultStatus status;
 
-    public GameResult(String firstPlayer, String secondPlayer, String winner) {
+    public GameResult(long gameId, String firstPlayer, String secondPlayer, String winner) {
+        this.gameId = gameId;
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         if (winner == null) {
