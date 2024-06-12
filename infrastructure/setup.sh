@@ -19,6 +19,11 @@ cd tictactoe || exit
 # Add the .env file
 echo "Adding the .env file"
 touch .env
+touch .env
+echo "RDS_ENDPOINT=${rds_endpoint}" >> .env
+echo "AWS_ACCESS_KEY_ID=${aws_access_key_id}" >> .env
+echo "AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}" >> .env
+echo "AWS_SESSION_TOKEN=${aws_session_token}" >> .env
 
 echo "Starting the application"
 sudo docker-compose up -d

@@ -14,13 +14,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AWSConfiguration {
-    @Value("${aws.access.key}")
+    @Value("${AWS_ACCESS_KEY_ID}")
     private String awsAccessKey;
 
-    @Value("${aws.secret.key}")
+    @Value("${AWS_SECRET_ACCESS_KEY}")
     private String awsSecretKey;
 
-    @Value("${aws.session.token}")
+    @Value("${AWS_SESSION_TOKEN}")
     private String awsSessionToken;
 
     @Value("${aws.region}")
