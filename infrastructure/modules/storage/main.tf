@@ -23,7 +23,7 @@ resource "aws_db_subnet_group" "tictactoe_db_subnet_group" {
 }
 
 resource "aws_db_instance" "tictactoe_db" {
-  allocated_storage    = 20
+  allocated_storage    = 10
   engine               = "postgres"
   publicly_accessible  = true
   engine_version       = "16.3"
