@@ -32,13 +32,14 @@ const router = useRouter();
 
 const handleSubmit = async () => {
   login(username.value, password.value)
-    .then(() => {
-      userStore.username = username.value;
-      router.push('/');
-    })
-    .catch((error) => {
-      errorMessage.value = error.response.data.message;
-    });
+      .then(() => {
+        userStore.setUsername(username.value);
+        router.push('/');
+      })
+      .catch((error) => {
+        console.log(error);
+        errorMessage.value = error.response.data.message;
+      });
 };
 </script>
 

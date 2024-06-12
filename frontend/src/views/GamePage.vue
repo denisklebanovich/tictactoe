@@ -10,6 +10,11 @@
     </section>
 
     <section v-else-if="step === 'GAME'">
+      <div class="pictures">
+        <img :src="userPicture" alt="Your picture" class="user-picture"/>
+        <span>VS</span>
+        <img :src="opponentPicture" alt="Opponent picture" class="opponent-picture"/>
+      </div>
       <h1 :class="{'your-turn': myTurn}">{{ myTurn ? 'Your move...' : 'Waiting for opponent...' }}</h1>
       <Board :disabled="!myTurn" :board="board" @cell-click="handleCellClick"/>
     </section>
@@ -29,6 +34,7 @@ import {computed, onUnmounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import Board from '@/components/Board.vue';
 import {makeMove, subscribe} from "@/services/GameService.ts";
+import {useUserStore} from "@/stores/userStore.ts";
 
 const route = useRoute();
 const username = route.params.username || localStorage.getItem('username');
@@ -39,9 +45,15 @@ const currentPlayer = ref(undefined);
 const board = ref(Array(3).fill().map(() => Array(3).fill('EMPTY')));
 const winner = ref(undefined);
 
+const userStore = useUserStore();
+
 const myTurn = computed(() => currentPlayer.value === username);
 
-const handleGameEvent = (event) => {
+const userPicture = ref(null);
+const opponentPicture = ref(null);
+
+const handleGameEvent = async (event) => {
+  console.log('Received event:', event);
   if (event.event === 'GAME_STARTED') {
     step.value = 'GAME';
     gameId.value = event.gameId;
@@ -54,6 +66,9 @@ const handleGameEvent = (event) => {
   }
   currentPlayer.value = event.currentPlayer;
   board.value = event.board;
+
+  userPicture.value = await userStore.getProfileImage(event.firstPlayer);
+  opponentPicture.value = await userStore.getProfileImage(event.secondPlayer);
 };
 
 const handleFindGame = () => {
@@ -134,6 +149,20 @@ h1, h2 {
 
 .game-over-display {
   margin-top: 20px;
+}
+
+.pictures {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 20px;
+  }
 }
 
 </style>

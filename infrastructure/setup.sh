@@ -15,5 +15,10 @@ sudo yum install git -y
 echo "Cloning the repository"
 git clone https://github.com/denisklebanovich/tictactoe.git
 cd tictactoe || exit
+
+# Add the .env file
+echo "Adding the .env file"
+touch .env
+
 echo "Starting the application"
 sudo docker-compose up -d

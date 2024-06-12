@@ -49,3 +49,7 @@ export const refreshToken = async () => {
         console.error('Token refresh failed:', error);
     }
 };
+
+export function getAuthToken() {
+    return localStorage.getItem('accessToken');
+}

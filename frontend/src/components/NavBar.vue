@@ -9,6 +9,12 @@
     <template v-else>
       <router-link to="/login" class="nav-link">Login</router-link>
     </template>
+    <div class="avatar">
+      <img v-if="profileImage" :src="profileImage" alt="Profile Image" width="40" height="40">
+      <img v-else src="https://cdn-icons-png.flaticon.com/512/3541/3541871.png" alt="Profile Image" width="40"
+           height="40">
+      <input type="file" @change="uploadProfileImage" class="profile-image-input">
+    </div>
   </nav>
 </template>
 
@@ -17,8 +23,10 @@ import {logout} from "@/services/AuthService.ts";
 import {useUserStore} from "@/stores/userStore.ts";
 import router from "@/router/index.js";
 import {loadCPU} from "@/services/CpuService.ts";
+import {onMounted, ref} from "vue";
 
 const userStore = useUserStore();
+const profileImage = ref(null);
 
 const signOut = async () => {
   await logout();
@@ -28,6 +36,27 @@ const signOut = async () => {
 const loadCpu = async () => {
   console.log(await loadCPU());
 };
+
+const uploadProfileImage = async (event) => {
+  const file = event.target.files[0];
+  await userStore.setProfileImage(file);
+};
+
+const fetchProfileImage = async () => {
+  try {
+    const imageUrl = await userStore.getProfileImage(userStore.username.value);
+    if (imageUrl) {
+      profileImage.value = `${imageUrl}?${new Date().getTime()}`; // Add a cache-busting query parameter
+    }
+  } catch (error) {
+    console.error('Error fetching profile image:', error);
+  }
+};
+
+onMounted(async () => {
+  await fetchProfileImage();
+});
+
 </script>
 
 <style scoped>
@@ -68,5 +97,21 @@ const loadCpu = async () => {
 .action-button:hover {
   background-color: #e0e0e0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.profile-image-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 </style>
